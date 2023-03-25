@@ -29,9 +29,16 @@ ec2_client = boto3.client(
     region_name=config['aws']['region']
 )
 key_pair_name = config['ec2']['key_pair_name']
+try:
+    key_pair = ec2_client.describe_key_pairs(KeyNames=[key_pair_name])['KeyPairs'][0]
+except ec2_client.exceptions.ClientError as e:
+    if e.response['Error']['Code'] == 'InvalidKeyPair.NotFound':
+        print(f'Error: Key pair {key_pair_name} not found.')
+        exit(1)
+    else:
+        raise
 instance_type = config['ec2']['instance_type']
 ami_id = config['ec2']['ami_id']
-key_pair = ec2_client.create_key_pair(KeyName=key_pair_name)
 security_groups = ec2_client.describe_security_groups(
     Filters=[{'Name': 'group-name', 'Values': ['default']}]
 )['SecurityGroups']
