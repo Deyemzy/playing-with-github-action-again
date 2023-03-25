@@ -13,13 +13,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2.2.2
+      - name: Set up Node.js and Python
+        uses: actions/setup-node@v2
         with:
-          python-version: '3.8'
-
+          node-version: '16.x'
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          npm install
+          pip install -r requirements.txt
 
       - name: Pylint check
         run: pylint lambda_function.py
@@ -37,6 +38,11 @@ jobs:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
 
+      - name: Save pylint score as environment variable
+        id: pylint-score
+        run: echo "::set-env name=PYLINT_SCORE::$(pylint --output-format=text lambda_function.py | awk '/Your code has been rated at/ { print $9 }')"
+        shell: bash
+
   deploy-s3-ec2:
     runs-on: ubuntu-latest
     needs: code-checks
@@ -46,10 +52,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2.2.2
+      - name: Set up Node.js and Python
+        uses: actions/setup-node@v2
         with:
-          python-version: '3.8'
+          node-version: '16.x'
 
       - name: Install dependencies
         run: pip install -r requirements.txt
