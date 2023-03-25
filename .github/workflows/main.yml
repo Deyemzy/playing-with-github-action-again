@@ -17,11 +17,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '16.x'
-      - name: Install dependencies
-        run: |
-          npm install
-          pip install -r requirements.txt
-
+          
       - name: Pylint check
         run: pylint lambda_function.py
 
@@ -56,9 +52,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '16.x'
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
 
       - name: Create S3 bucket and EC2 instance
         env:
