@@ -78,4 +78,3 @@ else:
 # Tag the instance
 ec2_client.create_tags(
     Resources=[instance_id], Tags=[{'Key': 'Name', 'Value': instance_name}])
-
