@@ -1,9 +1,11 @@
 """
 Playing with github action again
+
 Author: Lion Adigun
 Date: 2023-03-25
 """
 
+import sys
 import configparser
 import boto3
 
@@ -30,11 +32,13 @@ ec2_client = boto3.client(
 )
 key_pair_name = config['ec2']['key_pair_name']
 try:
-    key_pair = ec2_client.describe_key_pairs(KeyNames=[key_pair_name])['KeyPairs'][0]
+    key_pair = ec2_client.describe_key_pairs(
+        KeyNames=[key_pair_name]
+        )['KeyPairs'][0]
 except ec2_client.exceptions.ClientError as e:
     if e.response['Error']['Code'] == 'InvalidKeyPair.NotFound':
         print(f'Error: Key pair {key_pair_name} not found.')
-        exit(1)
+        sys.exit(1)
     else:
         raise
 instance_type = config['ec2']['instance_type']
