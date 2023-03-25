@@ -52,8 +52,9 @@ jobs:
 
       - name: Save pylint score as environment variable
         id: pylint-score
-        run: echo "::set-env name=PYLINT_SCORE::$(pylint --output-format=text lambda_function.py | awk '/Your code has been rated at/ { print $9 }')"
+        run: echo "PYLINT_SCORE=$(pylint --output-format=text lambda_function.py | awk '/Your code has been rated at/ { print $9 }')" >> $GITHUB_ENV
         shell: bash
+
 
   deploy-s3-ec2:
     runs-on: ubuntu-latest
