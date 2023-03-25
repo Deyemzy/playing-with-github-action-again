@@ -41,14 +41,14 @@ jobs:
 
 
       - name: Run Snyk
-              env:
-                SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-              run: |
-                curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
-                sudo apt-get install -y nodejs
-                sudo npm install -g snyk
-                snyk auth $SNYK_TOKEN
-                snyk test --file=requirements.txt
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: |
+          curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+          sudo apt-get install -y nodejs
+          sudo npm install -g snyk
+          snyk auth $SNYK_TOKEN
+          snyk test --file=requirements.txt
 
       - name: Save pylint score as environment variable
         id: pylint-score
