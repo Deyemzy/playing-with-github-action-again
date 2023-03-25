@@ -18,6 +18,9 @@ jobs:
         with:
           node-version: '16.x'
 
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
       - name: Install pylint
         run: pip install pylint
 
@@ -32,7 +35,7 @@ jobs:
 
       - name: Install bandit
         run: pip install bandit
-        
+
       - name: Bandit check
         run: bandit -r lambda_function.py
 
@@ -62,6 +65,9 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '16.x'
+      
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
       - name: Create S3 bucket and EC2 instance
         env:
